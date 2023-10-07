@@ -5,8 +5,6 @@ name: Auto PR to action-repo-qa
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   build:
