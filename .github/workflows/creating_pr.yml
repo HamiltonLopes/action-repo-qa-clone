@@ -1,0 +1,49 @@
+name: Auto Create PR in Another Repository
+
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  create_pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure Git
+        run: |
+          git config --global user.email "hamilton_dino02@hotmail.com"
+          git config --global user.name "Hamilton Lopes"
+
+      - name: Create PR in Another Repository
+        run: |
+          # Replace with your target repository URL
+          target_repository_url="https://github.com/HamiltonLopes/action-repo-qa.git"
+
+          # Get the source branch name from the PR
+          source_branch="${{ github.event.pull_request.head.ref }}"
+
+          # Get the target branch name from the PR
+          target_branch="${{ github.event.pull_request.base.ref }}"
+
+          # Clone the target repository
+          git clone "$target_repository_url" target-repo
+
+          # Change directory to the cloned repository
+          cd target-repo
+
+          # Create a new branch in the target repository based on the source branch
+          git checkout -b "$source_branch"
+
+          # Push the new branch to the target repository
+          git push origin "$source_branch"
+
+          # Create the pull request
+          gh pr create --base "$target_branch" --head "$source_branch" --title "Auto-created PR from $source_branch" --token "${{ secrets.PAT_TOKEN }}"
+
+          # Clean up
+          cd ..
+          rm -rf target-repo
