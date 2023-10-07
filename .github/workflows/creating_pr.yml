@@ -43,6 +43,7 @@ jobs:
           git config pull.rebase true
           git fetch original
           git checkout main
+          git pull
           git pull original ${{ steps.branchname.outputs.branch }}
           git push original main
           
