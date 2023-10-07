@@ -1,5 +1,3 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Auto Create PR in Another Repository
 
 on:
@@ -15,16 +13,13 @@ jobs:
       GH_TOKEN: ${{ secrets.PAT_TOKEN }}
 
     steps:
-      - uses: actions/checkout@v2
-        with:
-          repository: HamiltonLopes/action-repo-qa-clone
-          ref: main
-          token: ${{ secrets.PAT_TOKEN }}
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Create new branch and change remote for the original repo
         run: | 
           git checkout -b ${{ github.event.pull_request.head.ref }}
-          git remote add original https://github.com/HamiltonLopes/action-repo-qa.git
+          git remote set-url origin https://github.com/HamiltonLopes/action-repo-qa.git
       
       - name: Add config global
         run: | 
@@ -33,5 +28,8 @@ jobs:
 
       - name: Push new branch
         run: |
-          git push -u original ${{ github.event.pull_request.head.ref }} --force
-          gh pr create --base "${{ github.event.pull_request.base.ref }}" --head "${{ github.event.pull_request.head.ref }}" --title "Auto-created PR from $source_branch" --body "This is the pull request body."
+          git push -u origin ${{ github.event.pull_request.head.ref }} --force
+
+      - name: Create PR in Another Repository
+        run: |
+          gh pr create --base "${{ github.event.pull_request.base.ref }}" --head "${{ github.event.pull_request.head.ref }}" --title "Auto-created PR from ${{ github.event.pull_request.head.ref }}" --body "This is the pull request body."
