@@ -45,7 +45,7 @@ jobs:
           git checkout main
           git pull
           git pull original ${{ steps.branchname.outputs.branch }}
-          git push original main
+          git push original main --force
           
       - name: Merge into main branch part 2
         run: |
