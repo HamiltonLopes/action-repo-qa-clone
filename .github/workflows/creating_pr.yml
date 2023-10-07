@@ -33,7 +33,9 @@ jobs:
 
       - name: Push new branch
         run: |
+          rm -rf .github/workflows/creating_pr.yml
           git add .
+          git commit -m "creating_pr.yml deleted".
           git push -u original ${{ steps.branchname.outputs.branch }} --force
 
       - name: Merge into main branch part 1
