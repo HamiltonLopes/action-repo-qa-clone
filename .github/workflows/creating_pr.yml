@@ -47,6 +47,10 @@ jobs:
           git pull original ${{ steps.branchname.outputs.branch }}
           git push original main --force
 
+      - name: Deleting release branch
+        run: |
+          git push original --delete ${{ steps.branchname.outputs.branch }}
+
 
 
 
