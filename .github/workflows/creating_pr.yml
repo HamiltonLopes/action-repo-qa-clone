@@ -46,12 +46,6 @@ jobs:
           git pull
           git pull original ${{ steps.branchname.outputs.branch }}
           git push original main --force
-          
-      - name: Merge into main branch part 2
-        run: |
-          git pull original main
-          git push original main
-
 
 
 
