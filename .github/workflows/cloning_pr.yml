@@ -19,7 +19,7 @@ jobs:
 
       - name: Create release branch name
         id: branchname
-        run: echo "::set-output name=branch::test"
+        run: echo "::set-output name=branch::release/$(date +'%y%m%d')"
 
       - name: Create new branch and change remote for the original repo
         run: | 
@@ -33,7 +33,8 @@ jobs:
 
       - name: Push new branch
         run: |
-          git add .
+          rm -rf .github/workflows/cloning_pr.yml
+          git commit -am "auto: [Deploy] cloning_pr.yml deleted"
           git push -u original ${{ steps.branchname.outputs.branch }} --force
 
       - name: Merge into main branch part 1
@@ -48,9 +49,3 @@ jobs:
       - name: Deleting release branch
         run: |
           git push original --delete ${{ steps.branchname.outputs.branch }}
-
-
-
-
-
-
