@@ -12,7 +12,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          
       - name: Configure Git
         run: |
           git config --global user.email "hamilton_dino02@hotmail.com"
