@@ -1,3 +1,5 @@
+# This is a basic workflow to help you get started with Actions
+
 name: Auto Create PR in Another Repository
 
 on:
@@ -10,42 +12,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
+          repository: HamiltonLopes/action-repo-qa-clone
+          ref: main
           token: ${{ secrets.PAT_TOKEN }}
 
-      - name: Configure Git
-        run: |
+      - name: Create new branch and change remote for the original repo
+        run: | 
+          git checkout -b ${{ github.event.pull_request.head.ref }}
+          git remote add original https://github.com/HamiltonLopes/action-repo-qa.git
+      
+      - name: Add config global
+        run: | 
           git config --global user.email "hamilton_dino02@hotmail.com"
           git config --global user.name "Hamilton Lopes"
 
-      - name: Create PR in Another Repository
+      - name: Push new branch
         run: |
-          # Replace with your target repository URL
-          target_repository_url="https://github.com/HamiltonLopes/action-repo-qa.git"
-
-          # Get the source branch name from the PR
-          source_branch="${{ github.event.pull_request.head.ref }}"
-
-          # Get the target branch name from the PR
-          target_branch="${{ github.event.pull_request.base.ref }}"
-
-          # Clone the target repository
-          git clone "$target_repository_url" target-repo
-
-          # Change directory to the cloned repository
-          cd target-repo
-
-          # Create a new branch in the target repository based on the source branch
-          git checkout -b "$source_branch"
-
-          # Push the new branch to the target repository
-          git push origin "$source_branch"
-
-          # Create the pull request
-          gh pr create --base "$target_branch" --head "$source_branch" --title "Auto-created PR from $source_branch"
-
-          # Clean up
-          cd ..
-          rm -rf target-repo
+          git push -u original ${{ github.event.pull_request.head.ref }} --force
+          gh pr create --base "${{ github.event.pull_request.base.ref }}" --head "${{ github.event.pull_request.head.ref }}" --title "Auto-created PR from $source_branch"
