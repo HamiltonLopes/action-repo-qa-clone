@@ -40,6 +40,7 @@ jobs:
 
       - name: Merge into main branch part 1
         run: |
+          git fetch origin
           git checkout main
           git config pull.rebase true
           git pull origin ${{ steps.branchname.outputs.branch }}
