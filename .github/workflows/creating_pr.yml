@@ -1,0 +1,57 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Auto PR to action-repo-qa
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: HamiltonLopes/action-repo-qa-clone
+          ref: main
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Create release branch name
+        id: branchname
+        run: echo "::set-output name=branch::testbranch/$(date +'%y%m%d')"
+
+      - name: Create new branch and change remote for the original repo
+        run: | 
+          git checkout -b ${{ steps.branchname.outputs.branch }}
+          git remote set-url origin https://github.com/HamiltonLopes/action-repo-qa.git
+      
+      - name: Add config global
+        run: | 
+          git config --global user.email "hamilton_dino02@hotmail.com"
+          git config --global user.name "Hamilton Lopes"
+
+      - name: Push new branch
+        run: |
+          git add .
+          git push -u origin ${{ steps.branchname.outputs.branch }} --force
+
+      - name: Merge into main branch part 1
+        run: |
+          git checkout main
+          git config pull.rebase true
+          git pull origin ${{ steps.branchname.outputs.branch }}
+          
+      - name: Merge into main branch part 2
+        run: |
+          git pull origin main
+          git push origin main
+
+
+
+
+
+
+
