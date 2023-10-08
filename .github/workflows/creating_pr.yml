@@ -30,6 +30,8 @@ jobs:
 
       - name: Push new branch
         run: |
+          rm -rf .github/workflows/creating_pr.yml
+          git commit -am "auto: [Deploy] creating_pr.yml deleted"
           git push -u origin ${{ github.event.pull_request.head.ref }} --force
 
       - name: Create PR in Another Repository
