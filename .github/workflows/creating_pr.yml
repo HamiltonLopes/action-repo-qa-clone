@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           repository: HamiltonLopes/action-repo-qa-clone
-          ref: main
+          ref: ${{ github.event.pull_request.head.ref }}
           token: ${{ secrets.PAT_TOKEN }}
 
       - name: Create new branch and change remote for the original repo
