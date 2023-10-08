@@ -15,6 +15,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        token: ${{ secrets.PAT_TOKEN }}
 
       - name: Create new branch and change remote for the original repo
         run: | 
