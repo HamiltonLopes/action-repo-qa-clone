@@ -13,9 +13,10 @@ jobs:
       GH_TOKEN: ${{ secrets.PAT_TOKEN }}
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
+          repository: HamiltonLopes/action-repo-qa-clone
+          ref: main
           token: ${{ secrets.PAT_TOKEN }}
 
       - name: Create new branch and change remote for the original repo
