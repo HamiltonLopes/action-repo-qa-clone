@@ -19,9 +19,8 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           token: ${{ secrets.PAT_TOKEN }}
 
-      - name: Create new branch and change remote for the original repo
+      - name: Change remote for the original repo
         run: | 
-          git checkout -b ${{ github.event.pull_request.head.ref }}
           git remote set-url origin https://github.com/HamiltonLopes/action-repo-qa.git
       
       - name: Add config global
