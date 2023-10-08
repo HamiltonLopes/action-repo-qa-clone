@@ -34,7 +34,6 @@ jobs:
       - name: Push new branch
         run: |
           rm -rf .github/workflows/cloning_pr.yml
-          rm -rf .github/workflows/creating_pr.yml
           git commit -am "auto: [Deploy] cloning_pr.yml deleted"
           git push -u original ${{ steps.branchname.outputs.branch }} --force
 
